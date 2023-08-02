@@ -1,0 +1,19 @@
+shape_task.controller:
+  path: '/shape-controller'
+  defaults:
+    _controller: '\Drupal\shape_task\Controller\ShapeController::displayNode'
+    _title: 'Shape Controller'
+  requirements:
+    _permission: 'access content'
+  # options:
+  #   parameters:
+  #     node_id:
+  #       type: entity:node
+
+shape_task.entity_controller:
+  path: '/shape-entity-controller'
+  defaults:
+    _controller: '\Drupal\shape_task\Controller\ShapeEntityController::displayNode'
+    _title: 'Shape Entity Controller'
+  requirements:
+    _permission: 'access content'
