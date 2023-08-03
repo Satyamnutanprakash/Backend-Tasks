@@ -1,0 +1,7 @@
+items_dropdown.items_form:
+  path: '/items-shop'
+  defaults:
+    _form: '\Drupal\items_dropdown\Form\ItemsForm'
+    _title: 'Items Shop'
+  requirements:
+    _permission: 'access content'

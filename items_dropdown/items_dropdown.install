@@ -1,0 +1,252 @@
+<?php
+
+use Drupal\Core\Database\Database;
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Items Dropdown Task Module module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function items_dropdown_schema() {
+  $schema = Database::getConnection()->schema();
+  $electronic_item = 'electronic_item';
+  $modal = 'modal';
+  $color = 'color';
+
+  // Create the electronic item table if it doesn't exist.
+
+  if(!$schema->tableExists($electronic_item)) {
+    $schema->createTable($electronic_item, [
+      'fields' => [
+        'serial_number' => [
+          'type' => 'serial',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ],
+        'item_id' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ],
+        'item_name' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ],
+      ],
+      'primary key' => ['serial_number'],
+    ]);
+  }
+
+  // Create the modal table if it doesn't exist.
+
+  if(!$schema->tableExists($modal)) {
+    $schema->createTable($modal, [
+      'fields' => [
+        'serial_number' => [
+          'type' => 'serial',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ],
+        'modal_id' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ],
+        'item_id' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ],
+        'modal_name' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ],
+      ],
+      'primary key' => ['serial_number'],
+      'foreign keys' => [
+        'item_id' => [
+          'table' => $electronic_item,
+          'columns' => ['item_id'],
+          'references' => ['item_id' => 'item_id'],
+          'on delete' => 'CASCADE',
+        ],
+      ],
+    ]);
+  }
+
+  // Create the color table if it doesn't exist.
+
+    if(!$schema->tableExists($color)) {
+    $schema->createTable($color, [
+      'fields' => [
+        'serial_number' => [
+          'type' => 'serial',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ],
+        'color_id' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ],
+        'modal_id' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ],
+        'color_name' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ],
+      ],
+      'primary key' => ['serial_number'],
+      'foreign keys' => [
+        'modal_id' => [
+          'table' => $modal,
+          'columns' => ['modal_id'],
+          'references' => ['modal_id' => 'modal_id'],
+          'on delete' => 'CASCADE',
+        ],
+      ],
+    ]);
+  }
+
+  return $schema;
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function items_dropdown_update_101101() {
+  $item_values = [
+    ['M', 'Mobile'],
+    ['L', 'Laptop'],
+    ['T', 'Tablet'],
+  ];
+
+  foreach ($item_values as $item) {
+    \Drupal::database()->insert('electronic_item')
+      ->fields(['item_id', 'item_name'])
+      ->values($item)
+      ->execute();
+  }
+
+  // Return a message indicating the completion of the update.
+  return 'Update 101101 has been applied.';
+}
+/**
+ * Implements hook_update_N().
+ */
+function items_dropdown_update_101102() {
+  $modal_values = [
+    ['M', 'M13', 'Motorola G13'],
+    ['M', 'M22', 'Motorola G22'],
+    ['M', 'M32', 'Motorola G32'],
+    ['M', 'AP14', 'Apple Iphone 14'],
+    ['M', 'AP13', 'Apple Iphone 13'],
+    ['M', 'SS23', 'Samsung Galaxy S23'],
+    ['M', 'SS23U', 'Samsung Galaxy S23 Ultra'],
+    ['M', 'SZF5', 'Samsung Galaxy Z Fold5'],
+    ['L', 'HP2', 'HP Pavilion'],
+    ['L', 'HPO', 'HP Omen'],
+    ['L', 'HPV', 'HP Victus'],
+    ['L', 'LNTP', 'Lenovo ThinkPad'],
+    ['L', 'LNIP', 'Lenovo IdeaPad'],
+    ['L', 'LNL5', 'Lenovo Legion 5'],
+    ['L', 'ASVB', 'Asus VivoBook'],
+    ['L', 'ASTG', 'Asus TUF Gaming'],
+    ['T', 'APIP', 'Apple Ipad Pro'],
+    ['T', 'API10', 'Apple Ipad 10th Gen'],
+    ['T', 'APIM', 'Apple Ipad Mini'],
+    ['T', 'RP', 'Redmi Pad'],
+    ['T', 'RLEPM', 'realMe Pad Mini'],
+    ['T', 'RLEP', 'realMe Pad'],
+    ['T', 'SST9U', 'Samsung Galaxy Tab S9 Ultra'],
+    ['T', 'SST8U', 'Samsung Galaxy Tab S8 Ultra'],
+  ];
+
+  foreach ($modal_values as $modal) {
+    \Drupal::database()->insert('modal')
+      ->fields(['item_id', 'modal_id', 'modal_name'])
+      ->values($modal)
+      ->execute();
+  }
+
+  // Return a message indicating the completion of the update.
+  return 'Update 101102 has been applied.';
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function items_dropdown_update_101103() {
+  $color_values = [
+    ['M13', 'MLB', 'Lavender Blue'],
+    ['M13', 'MCW', 'Crystal White'],
+    ['M22', 'MFB', 'Frosted Blue'],
+    ['M22', 'MMB', 'Midnight Black'],
+    ['M32', 'MSS', 'Satin Silver'],
+    ['M32', 'MMG', 'Midnight Grey'],
+    ['AP14', 'APSL', 'Starlight'],
+    ['AP14', 'APMB', 'Midnight Black'],
+    ['AP13', 'APM', 'Midnight'],
+    ['AP13', 'APB', 'Blue'],
+    ['SS23', 'SSPB', 'Phantom Black'],
+    ['SS23', 'SSL', 'Lavender'],
+    ['SS23U', 'SSPBK', 'Phantom Black'],
+    ['SS23U', 'SSLR', 'Lavender'],
+    ['SZF5', 'SZC', 'Cream'],
+    ['SZF5', 'SZM', 'Mint'],
+    ['HP2', 'HPB', 'Black'],
+    ['HP2', 'HPW', 'White'],
+    ['HPO', 'HPBK', 'Black'],
+    ['HPO', 'HPWE', 'White'],
+    ['HPV', 'HPVBE', 'Blue'],
+    ['HPV', 'HPVBK', 'Black'],
+    ['LNTP', 'LNTPB', 'Black'],
+    ['LNTP', 'LNTPBE', 'Blue'],
+    ['LNIP', 'LNIPB', 'Black'],
+    ['LNIP', 'LNIPBE', 'Blue'],
+    ['LNL5', 'LNL5ZB', 'Zad Black'],
+    ['LNL5', 'LNL5G', 'Grey'],
+    ['ASVB', 'ASVBW', 'White'],
+    ['ASVB', 'ASVBB', 'Black'],
+    ['ASTG', 'ASTGB', 'Black'],
+    ['ASTG', 'ASTGW', 'White'],
+    ['APIP', 'APIPY', 'Yellow'],
+    ['APIP', 'APIPRG', 'Rose Gold'],
+    ['API10', 'APIRG', 'Rose Gold'],
+    ['API10', 'APIS', 'Silver'],
+    ['APIM', 'APIMB', 'Black'],
+    ['APIM', 'APIPR', 'Product Red'],
+    ['RP', 'RPB', 'Blue'],
+    ['RP', 'RPBK', 'Black'],
+    ['RLEPM', 'RLEW', 'White'],
+    ['RLEPM', 'RLEB', 'Blue'],
+    ['RLEP', 'RLEBK', 'Black'],
+    ['RLEP', 'RLEP', 'Pink'],
+    ['SST9U', 'SST9G', 'Gray'],
+    ['SST9U', 'SST9B', 'Beige'],
+    ['SST8U', 'SST8G', 'Graphite'],
+    ['SST8U', 'SST8PG', 'Pink Gold'],
+  ];
+
+  foreach ($color_values as $color) {
+    \Drupal::database()->insert('color')
+      ->fields(['modal_id', 'color_id', 'color_name'])
+      ->values($color)
+      ->execute();
+  }
+
+  // Return a message indicating the completion of the update.
+  return 'Update 101103 has been applied.';
+}
+
+
+
