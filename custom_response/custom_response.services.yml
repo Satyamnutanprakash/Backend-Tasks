@@ -1,0 +1,6 @@
+services:
+  custom_response.event_subscriber:
+    class: Drupal\custom_response\EventSubscriber\CustomResponseSubscriber
+    arguments: ['@messenger']
+    tags:
+      - { name: event_subscriber }
