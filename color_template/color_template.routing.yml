@@ -1,0 +1,15 @@
+color_template.example:
+  path: '/color-template/example'
+  defaults:
+    _title: 'Color Template Task'
+    _controller: '\Drupal\color_template\Controller\ColorTemplateController::build'
+  requirements:
+    _permission: 'access content'
+
+color_template.settings_form:
+  path: '/admin/config/system/color-template'
+  defaults:
+    _title: 'Color Template Task Module'
+    _form: 'Drupal\color_template\Form\SettingsForm'
+  requirements:
+    _permission: 'administer color_template configuration'

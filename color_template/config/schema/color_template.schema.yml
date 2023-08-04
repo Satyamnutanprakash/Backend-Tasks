@@ -1,0 +1,8 @@
+# Schema for the configuration files of the Color Template TaskModule[D[D[D[D[D[D [C[C[C Module module.
+color_template.settings:
+  type: config_object
+  label: 'Color Template TaskModule[D[D[D[D[D[D [C[C[C Module settings'
+  mapping:
+    example:
+      type: string
+      label: 'Example'
