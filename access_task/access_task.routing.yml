@@ -1,0 +1,7 @@
+access_task.settings_form:
+  path: '/admin/config/system/access-task'
+  defaults:
+    _title: 'Access Task Module settings'
+    _form: 'Drupal\access_task\Form\SettingsForm'
+  requirements:
+    _permission: 'administer access_task configuration'
