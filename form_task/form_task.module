@@ -1,0 +1,10 @@
+<?php
+
+function form_task_theme($existing, $type, $theme, $path){
+  return [
+    'custom_template' => [
+      'variables' => ['rows' => []],
+      'template' => 'custom-template',
+    ],
+    ];
+}

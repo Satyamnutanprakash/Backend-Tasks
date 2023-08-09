@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+function form_task_schema() {
+  $schema['form_data'] = [
+    'description' => 'Store Account Information',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key: Unique record ID.',
+      ],
+      'firstname' => [
+        'type' => 'varchar',
+        'length' => 64,
+        'not null' => TRUE,
+        'description' => 'First Name',
+      ],
+      'lastname' => [
+        'type' => 'varchar',
+        'length' => 60,
+        'not null' => TRUE,
+        'description' => 'Last Name',
+      ],
+      'email' => [
+        'type' => 'varchar',
+        'length' => 40,
+        'not null' => TRUE,
+        'description' => 'User Email',
+      ],
+      'phone' => [
+        'type' => 'varchar',
+        'length' => 40,
+        'not null' => TRUE,
+        'description' => 'Phone Number',
+      ],
+      'gender' => [
+        'type' => 'varchar',
+        'length' => 20,
+        'not null' => TRUE,
+        'description' => 'Gender',
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
+
+  return $schema;
+}

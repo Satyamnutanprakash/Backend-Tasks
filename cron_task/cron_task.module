@@ -1,0 +1,129 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Entity\EntityInterface;
+/**
+ * @file
+ * Primary module hooks for Cron Task Module module.
+ */
+
+
+/**
+ * Implements hook_cron().
+ */
+function cron_task_cron() {
+  $state = \Drupal::state()->get('lastcronrun');
+
+  if (empty($state)) {
+    $query = \Drupal::entityQuery('node')
+      ->accessCheck(TRUE)
+      ->condition('type', 'logs')
+      ->range(0, 50)
+      ->sort('created', 'ASC');
+    $nids = $query->execute();
+    $nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
+
+    foreach ($nodes as $node) {
+      $email = $node->get('field_logs_email')->value;
+      $title = $node->getTitle();
+      $body = $node->get('body')->value;
+
+      $config = \Drupal::config('custom_email_task.settings');
+      $subject = $config->get('subject');
+      $message = $config->get('message')['value'];
+
+      $subject_text = \Drupal::token()->replace($subject, ['node' => $node], ['clear' => TRUE]);
+      $message_text = \Drupal::token()->replace($message, ['node' => $node], ['clear' => TRUE]);
+
+      logs_send_email($email, $subject_text, $message_text);
+
+      // Send mail to static mail ID.
+    }
+  }
+
+  else {
+    $lastRunTime = (int) $state;
+    $currentTime = strtotime('now');
+
+    // Get nodes created between last run and current time.
+    $query = \Drupal::entityQuery('node')
+      ->accessCheck(TRUE)
+      ->condition('type', 'logs')
+      ->condition('created', $lastRunTime, '>')
+      ->condition('created', $currentTime, '<=')
+      ->range(0, 50) // Adjust the range as needed.
+      ->sort('created', 'ASC');
+    $nids = $query->execute();
+    $nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
+
+    foreach ($nodes as $node) {
+
+      $email = $node->get('field_logs_email')->value;
+      $title = $node->getTitle();
+      $body = $node->get('body')->value;
+
+      $config = \Drupal::config('custom_email_task.settings');
+      $subject = $config->get('subject');
+      $message = $config->get('message')['value'];
+
+      // Replace tokens in the email subject and message.
+
+      $subject_text = \Drupal::token()->replace($subject, ['node' => $node], ['clear' => TRUE]);
+      $message_text = \Drupal::token()->replace($message, ['node' => $node], ['clear' => TRUE]);
+
+      logs_send_email($email, $subject_text, $message_text);
+    }
+  }
+
+  // Store the current timestamp as the last cron run time.
+  $currentTimestamp = strtotime('now');
+  \Drupal::state()->set('lastcronrun', $currentTimestamp);
+}
+
+/**
+ * Send mail to the static email ID.
+ */
+function logs_send_email($email, $subject, $message) {
+
+  $params = [
+    'subject' => $subject,
+    'body' => $message,
+  ];
+
+
+  $result = \Drupal::service('plugin.manager.mail')->mail(
+    'cron_task',
+    'notification', // Replace with the actual key for your email template
+    $email,
+    'en',
+    $params
+  );
+
+  if ($result) {
+    \Drupal::logger('cron_task')->notice('Email sent to %email', ['%email' => $email]);
+  } else {
+    \Drupal::logger('cron_task')->error('Failed to send email to %email', ['%email' => $email]);
+  }
+}
+
+/**
+ * Implements hook_mail().
+ */
+function cron_task_mail($key, &$message, $params) {
+  $options = array(
+    'langcode' => $message['langcode'],
+  );
+
+  $site_name = \Drupal::config('system.site')->get('name');
+  $site_email = \Drupal::config('system.site')->get('mail');
+
+  switch ($key) {
+    case 'notification':
+      $message['headers']['Reply-To'] = $site_email ;
+      $message['headers']['Content-Type'] = 'text/html';
+      $message['headers']['From'] = $site_name . '<' . $site_email . '>';
+      $message['subject'] =  t('Page created: @title', array('@title' => $params['subject']), $options);
+      $message['body'][] = $params['body'];
+      break;
+  }
+}

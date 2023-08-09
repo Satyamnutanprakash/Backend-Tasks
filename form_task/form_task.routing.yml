@@ -1,0 +1,16 @@
+form_task.controller:
+  path: '/form-task/controller'
+  defaults:
+    _title: 'Controller'
+    _controller: '\Drupal\form_task\Controller\FormTaskController::build'
+  requirements:
+    _permission: 'access content'
+
+form_task.data_form:
+  path: '/form-task/form'
+  defaults:
+    _title: 'User Information'
+    _form: '\Drupal\form_task\Form\DataForm'
+  requirements:
+    _permission: 'access content'
+

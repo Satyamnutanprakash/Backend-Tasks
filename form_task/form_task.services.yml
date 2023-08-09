@@ -1,0 +1,4 @@
+services:
+  form_task.data_form_services:
+    class: '\Drupal\form_task\Form\DataForm'
+    arguments: [ '@messenger', '@database' ]
