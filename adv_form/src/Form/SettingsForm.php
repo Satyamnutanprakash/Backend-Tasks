@@ -29,7 +29,8 @@ class SettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
-    // $term =
+    $term = $this->config('adv_form.settings')->get('tags');
+
     $form['title'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Title'),
@@ -44,7 +45,7 @@ class SettingsForm extends ConfigFormBase {
       '#type' => 'entity_autocomplete',
       '#title' => $this->t('Tags'),
       '#target_type' => 'taxonomy_term',
-      '#default_value' => \Drupal\taxonomy\Entity\Term::load(1)
+      '#default_value' => \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($term),
     ];
     return parent::buildForm($form, $form_state);
   }
