@@ -1,30 +1,37 @@
 <?php
 
-use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Session\AccountInterface;
 /**
- * Implements hook_entity_access.
+ * @file
+ * Module for entity access.
  */
-function access_task_entity_access(\Drupal\Core\Entity\EntityInterface $entity, $operation, \Drupal\Core\Session\AccountInterface $account) {
+
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Access\AccessResult;
+
+/**
+ * Implements hook_entity_access().
+ */
+function access_task_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
   if ($operation == 'view') {
     $config = \Drupal::config('access_task.settings');
     $allowed_roles = $config->get('roles');
     $allowed_content_types = $config->get('content_types');
 
-if ($operation === 'view' && $account->hasPermission('access content')) {
-    if ($account->hasRole('authenticated')) {
-      $type = $entity->getEntityTypeId();
-      if ($type === 'node') {
-        $node_type = $entity->getType();
-        if ($node_type && in_array($node_type, $allowed_content_types) && in_array('authenticated', $allowed_roles)) {
-          return AccessResult::allowed();
+    if ($operation === 'view' && $account->hasPermission('access content')) {
+      if ($account->hasRole('authenticated')) {
+        $type = $entity->getEntityTypeId();
+        if ($type === 'node') {
+          $node_type = $entity->getType();
+          if ($node_type && in_array($node_type, $allowed_content_types) && in_array('authenticated', $allowed_roles)) {
+            return AccessResult::allowed();
+          }
+          return AccessResult::forbidden();
         }
-        return AccessResult::forbidden();
       }
+      return AccessResult::neutral();
     }
+    // Return neutral result for other operations.
     return AccessResult::neutral();
   }
-  // Return neutral result for other operations.
-  return AccessResult::neutral();
-}
 }

@@ -1,8 +1,5 @@
 <?php
-/**
- * @file
- * Contains \Drupal\student_registration\Form\RegistrationForm.
- */
+
 namespace Drupal\form_task\Form;
 
 use Drupal\Core\Form\FormBase;
@@ -11,33 +8,59 @@ use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Database\Connection;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Returns information form.
+ */
 class DataForm extends FormBase {
 
+  /**
+   * The config factory service.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
   protected $messenger;
+
+  /**
+   * The config factory service.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
   protected $database;
 
-public function __construct(MessengerInterface $messenger, Connection $database) {
-  $this->messenger = $messenger;
-  $this->database = $database;
-}
+  /**
+   * Constructor for the service.
+   *
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger service.
+   * @param \Drupal\Core\Database\Connection $database
+   *   The database service.
+   */
+  public function __construct(MessengerInterface $messenger, Connection $database) {
+    $this->messenger = $messenger;
+    $this->database = $database;
+  }
 
-public static function create(ContainerInterface $container) {
-  return new static(
+  /**
+   * Dependency injection.
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
     $container->get('messenger'),
     $container->get('database')
-  );
-}
+    );
+  }
 
   /**
    * {@inheritdoc}
    */
-
   public function getFormId() {
     return 'data_form';
   }
 
-  public function buildForm(array $form, FormStateInterface $form_state)
-  {
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state) {
     $form['firstname'] = [
       '#type' => 'textfield',
       '#title' => 'First Name',
@@ -73,6 +96,9 @@ public static function create(ContainerInterface $container) {
     return $form;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function submitForm(&$form, FormStateInterface $form_state) {
     $this->messenger->addMessage("Your Data Saved Successfully");
     $this->database->insert("form_data")->fields(
@@ -85,4 +111,5 @@ public static function create(ContainerInterface $container) {
       ]
     )->execute();
   }
+
 }

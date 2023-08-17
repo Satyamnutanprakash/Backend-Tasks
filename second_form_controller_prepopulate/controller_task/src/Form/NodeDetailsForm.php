@@ -7,19 +7,17 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\NodeInterface;
 use Drupal\user\Entity\User;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-
 
 /**
  * Configure Custom Controller Task Module settings for this site.
  */
 class NodeDetailsForm extends ConfigFormBase {
 
-  protected $configFactory;
-
   /**
+   * The account.
+   *
    * @var \Drupal\Core\Session\AccountInterface
    */
   protected $account;
@@ -39,16 +37,16 @@ class NodeDetailsForm extends ConfigFormBase {
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The current user service.
    */
-public function __construct( EntityTypeManagerInterface $entity_type_manager, AccountInterface $account) {
-      $this->entityTypeManager = $entity_type_manager;
-      $this->account = $account;
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, AccountInterface $account) {
+    $this->entityTypeManager = $entity_type_manager;
+    $this->account = $account;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create( ContainerInterface $container ) {
-    return new static (
+  public static function create(ContainerInterface $container) {
+    return new static(
       $container->get('entity_type.manager'),
       $container->get('current_user')
     );
@@ -122,4 +120,5 @@ public function __construct( EntityTypeManagerInterface $entity_type_manager, Ac
 
     $form_state->setRedirect('controller_task.settings', ['node' => $node->id()]);
   }
+
 }

@@ -5,31 +5,45 @@ namespace Drupal\form_task\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Returns responses for Custom Form Task routes.
  */
 class FormTaskController extends ControllerBase {
+  /**
+   * The config factory service.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
   protected $database;
 
-public function __construct(Connection $database) {
-  $this->database = $database;
-}
+  /**
+   * Constructor for the database service.
+   *
+   * @param \Drupal\Core\Database\Connection $database
+   *   The database service.
+   */
+  public function __construct(Connection $database) {
+    $this->database = $database;
+  }
 
-public static function create(ContainerInterface $container) {
-  return new static(
+  /**
+   * Dependency injection.
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
     $container->get('database')
-  );
-}
+    );
+  }
+
   /**
    * Builds the response.
    */
   public function build() {
 
     $query = $this->database->select('form_data', 'fd')
-                  ->fields('fd', ['id', 'firstname', 'lastname', 'email', 'phone', 'gender'])
-                  ->execute();
+      ->fields('fd', ['id', 'firstname', 'lastname', 'email', 'phone', 'gender'])
+      ->execute();
 
     $rows = [];
 
@@ -44,12 +58,12 @@ public static function create(ContainerInterface $container) {
 
     foreach ($query as $row) {
       $rows[] = [
-          'id' => $row->id,
-          'firstname' => $row->firstname,
-          'lastname' => $row->lastname,
-          'email' => $row->email,
-          'phone' => $row->phone,
-          'gender' => $row->gender,
+        'id' => $row->id,
+        'firstname' => $row->firstname,
+        'lastname' => $row->lastname,
+        'email' => $row->email,
+        'phone' => $row->phone,
+        'gender' => $row->gender,
       ];
     }
 
@@ -61,4 +75,5 @@ public static function create(ContainerInterface $container) {
 
     return $build;
   }
+
 }

@@ -2,7 +2,6 @@
 
 namespace Drupal\clone_task\Controller;
 
-use Drupal\Core\Controller\ControllerBase;
 use Drupal\node\Entity\Node;
 use Drupal\quick_node_clone\Entity\QuickNodeCloneEntityFormBuilder;
 use Drupal\Core\Datetime\DateFormatterInterface;
@@ -17,8 +16,25 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class CloneTaskController extends NodeController {
 
+  /**
+   * The entity type manager.
+   *
+   * @var \Drupal\quick_node_clone\Entity\QuickNodeCloneEntityFormBuilder
+   */
   protected $qncEntityFormBuilder;
 
+  /**
+   * Constructs a NodeController object.
+   *
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   *   The date formatter service.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer service.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   The entity repository.
+   * @param \Drupal\quick_node_clone\Entity\QuickNodeCloneEntityFormBuilder $entity_form_builder
+   *   The entity form builder.
+   */
   public function __construct(DateFormatterInterface $date_formatter, RendererInterface $renderer, EntityRepositoryInterface $entity_repository, QuickNodeCloneEntityFormBuilder $entity_form_builder) {
     parent::__construct($date_formatter, $renderer, $entity_repository);
     $this->qncEntityFormBuilder = $entity_form_builder;
@@ -36,7 +52,7 @@ class CloneTaskController extends NodeController {
     );
   }
 
-    /**
+  /**
    * Retrieves the entity form builder.
    *
    * @return \Drupal\quick_node_clone\Form\QuickNodeCloneFormBuilder
@@ -60,4 +76,5 @@ class CloneTaskController extends NodeController {
       throw new NotFoundHttpException();
     }
   }
+
 }

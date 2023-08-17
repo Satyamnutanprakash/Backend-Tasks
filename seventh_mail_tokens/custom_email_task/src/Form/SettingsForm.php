@@ -4,7 +4,6 @@ namespace Drupal\custom_email_task\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Link;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Extension\ModuleHandler;
 
@@ -12,13 +11,26 @@ use Drupal\Core\Extension\ModuleHandler;
  * Configure CUstom Email Task Module settings for this site.
  */
 class SettingsForm extends ConfigFormBase {
-
+  /**
+   * The config factory service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandler
+   */
   protected $moduleHandler;
 
+  /**
+   * Constructor for the Module Handler service.
+   *
+   * @param \Drupal\Core\Extension\ModuleHandler $moduleHandler
+   *   The module handler service.
+   */
   public function __construct(ModuleHandler $moduleHandler) {
     $this->moduleHandler = $moduleHandler;
   }
 
+  /**
+   * Dependency injection.
+   */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('module_handler')
@@ -95,6 +107,6 @@ class SettingsForm extends ConfigFormBase {
     parent::submitForm($form, $form_state);
     // $form_state->setRedirect('<front>');
     // tempstore alternative of Session.
-    }
+  }
 
 }

@@ -1,10 +1,15 @@
 <?php
 
+/**
+ * @file
+ * Primary module hooks for Item dropdown creation.
+ */
+
 use Drupal\Core\Database\Database;
 
 /**
  * @file
- * Install, update and uninstall functions for the Items Dropdown Task Module module.
+ * Hooks to create dependent dropdown table.
  */
 
 /**
@@ -17,8 +22,7 @@ function items_dropdown_schema() {
   $color = 'color';
 
   // Create the electronic item table if it doesn't exist.
-
-  if(!$schema->tableExists($electronic_item)) {
+  if (!$schema->tableExists($electronic_item)) {
     $schema->createTable($electronic_item, [
       'fields' => [
         'serial_number' => [
@@ -42,8 +46,7 @@ function items_dropdown_schema() {
   }
 
   // Create the modal table if it doesn't exist.
-
-  if(!$schema->tableExists($modal)) {
+  if (!$schema->tableExists($modal)) {
     $schema->createTable($modal, [
       'fields' => [
         'serial_number' => [
@@ -80,8 +83,7 @@ function items_dropdown_schema() {
   }
 
   // Create the color table if it doesn't exist.
-
-    if(!$schema->tableExists($color)) {
+  if (!$schema->tableExists($color)) {
     $schema->createTable($color, [
       'fields' => [
         'serial_number' => [
@@ -140,6 +142,7 @@ function items_dropdown_update_101101() {
   // Return a message indicating the completion of the update.
   return 'Update 101101 has been applied.';
 }
+
 /**
  * Implements hook_update_N().
  */
@@ -247,6 +250,3 @@ function items_dropdown_update_101103() {
   // Return a message indicating the completion of the update.
   return 'Update 101103 has been applied.';
 }
-
-
-

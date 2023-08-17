@@ -1,12 +1,16 @@
 <?php
 
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Entity\EntityInterface;
+/**
+ * @file
+ * Module for scheduled cron task.
+ */
+
+use Drupal\node\Entity\Node;
+
 /**
  * @file
  * Primary module hooks for Cron Task Module module.
  */
-
 
 /**
  * Implements hook_cron().
@@ -21,7 +25,7 @@ function cron_task_cron() {
       ->range(0, 50)
       ->sort('created', 'ASC');
     $nids = $query->execute();
-    $nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
+    $nodes = Node::loadMultiple($nids);
 
     foreach ($nodes as $node) {
       $email = $node->get('field_logs_email')->value;
@@ -35,7 +39,7 @@ function cron_task_cron() {
       $subject_text = \Drupal::token()->replace($subject, ['node' => $node], ['clear' => TRUE]);
       $message_text = \Drupal::token()->replace($message, ['node' => $node], ['clear' => TRUE]);
 
-      logs_send_email($email, $subject_text, $message_text);
+      cron_task_logs_send_email($email, $subject_text, $message_text);
 
       // Send mail to static mail ID.
     }
@@ -51,10 +55,11 @@ function cron_task_cron() {
       ->condition('type', 'logs')
       ->condition('created', $lastRunTime, '>')
       ->condition('created', $currentTime, '<=')
-      ->range(0, 50) // Adjust the range as needed.
+    // Adjust the range as needed.
+      ->range(0, 50)
       ->sort('created', 'ASC');
     $nids = $query->execute();
-    $nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
+    $nodes = Node::loadMultiple($nids);
 
     foreach ($nodes as $node) {
 
@@ -67,11 +72,10 @@ function cron_task_cron() {
       $message = $config->get('message')['value'];
 
       // Replace tokens in the email subject and message.
-
       $subject_text = \Drupal::token()->replace($subject, ['node' => $node], ['clear' => TRUE]);
       $message_text = \Drupal::token()->replace($message, ['node' => $node], ['clear' => TRUE]);
 
-      logs_send_email($email, $subject_text, $message_text);
+      cron_task_logs_send_email($email, $subject_text, $message_text);
     }
   }
 
@@ -83,17 +87,17 @@ function cron_task_cron() {
 /**
  * Send mail to the static email ID.
  */
-function logs_send_email($email, $subject, $message) {
+function cron_task_logs_send_email($email, $subject, $message) {
 
   $params = [
     'subject' => $subject,
     'body' => $message,
   ];
 
-
   $result = \Drupal::service('plugin.manager.mail')->mail(
     'cron_task',
-    'notification', // Replace with the actual key for your email template
+  // Replace with the actual key for your email template.
+    'notification',
     $email,
     'en',
     $params
@@ -101,7 +105,8 @@ function logs_send_email($email, $subject, $message) {
 
   if ($result) {
     \Drupal::logger('cron_task')->notice('Email sent to %email', ['%email' => $email]);
-  } else {
+  }
+  else {
     \Drupal::logger('cron_task')->error('Failed to send email to %email', ['%email' => $email]);
   }
 }
@@ -110,19 +115,19 @@ function logs_send_email($email, $subject, $message) {
  * Implements hook_mail().
  */
 function cron_task_mail($key, &$message, $params) {
-  $options = array(
+  $options = [
     'langcode' => $message['langcode'],
-  );
+  ];
 
   $site_name = \Drupal::config('system.site')->get('name');
   $site_email = \Drupal::config('system.site')->get('mail');
 
   switch ($key) {
     case 'notification':
-      $message['headers']['Reply-To'] = $site_email ;
+      $message['headers']['Reply-To'] = $site_email;
       $message['headers']['Content-Type'] = 'text/html';
       $message['headers']['From'] = $site_name . '<' . $site_email . '>';
-      $message['subject'] =  t('Page created: @title', array('@title' => $params['subject']), $options);
+      $message['subject'] = t('Page created: @title', ['@title' => $params['subject']], $options);
       $message['body'][] = $params['body'];
       break;
   }

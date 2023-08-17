@@ -94,7 +94,8 @@ class RenderBlockPro extends BlockBase implements ContainerFactoryPluginInterfac
     if (!empty($node_id)) {
       $node = $this->entityTypeManager->getStorage('node')->load($node_id);
       $this->configuration['node_id'] = $node ? $node->id() : NULL;
-    } else {
+    }
+    else {
       $this->configuration['node_id'] = NULL;
     }
   }

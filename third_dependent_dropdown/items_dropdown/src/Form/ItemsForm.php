@@ -45,6 +45,9 @@ class ItemsForm extends FormBase {
     return 'items_form';
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
     $opt = static::getItems();
@@ -98,13 +101,19 @@ class ItemsForm extends FormBase {
     return $form;
   }
 
-  public function submitForm(array &$form, FormStateInterface $form_state ) {
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
     $trigger = (string) $form_state->getTriggeringElement()['#value'];
-    if($trigger != 'submit' ) {
+    if ($trigger != 'submit') {
       $form_state->setRebuild();
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function dropdownCallback(array &$form, FormStateInterface $form_state) {
     $triggering_element = $form_state->getTriggeringElement();
     $triggering_element_name = $triggering_element['#name'];
@@ -117,6 +126,9 @@ class ItemsForm extends FormBase {
     }
   }
 
+  /**
+   * Function to get items.
+   */
   public function getItems() {
     $query = $this->database->select('electronic_item', 'e');
     $query->fields('e', ['item_id', 'item_name']);
@@ -128,6 +140,9 @@ class ItemsForm extends FormBase {
     return $options;
   }
 
+  /**
+   * Function to get modals.
+   */
   public function getModals($item) {
     $query = $this->database->select('modal', 'm');
     $query->fields('m', ['modal_id', 'modal_name']);
@@ -140,7 +155,10 @@ class ItemsForm extends FormBase {
     return $options;
   }
 
-  public function getColors ($modal) {
+  /**
+   * Function to get colors.
+   */
+  public function getColors($modal) {
     $query = $this->database->select('color', 'c');
     $query->fields('c', ['color_id', 'color_name']);
     $query->condition('c.modal_id', $modal);
@@ -151,4 +169,5 @@ class ItemsForm extends FormBase {
     }
     return $options;
   }
+
 }

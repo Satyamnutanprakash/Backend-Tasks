@@ -13,4 +13,3 @@ form_task.data_form:
     _form: '\Drupal\form_task\Form\DataForm'
   requirements:
     _permission: 'access content'
-

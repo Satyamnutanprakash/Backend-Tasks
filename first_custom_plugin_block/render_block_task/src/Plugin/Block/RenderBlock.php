@@ -149,23 +149,6 @@ class RenderBlock extends BlockBase implements ContainerFactoryPluginInterface {
    * {@inheritdoc}
    */
   public function build() {
-    // $config = $this->getConfiguration();
-    // $node_id = $this->configuration['node_id'];
-    // $build = [];
-    // $node = \Drupal::routeMatch()->getParameter('node');
-    // if ($node instanceof \Drupal\node\NodeInterface) {
-    //   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('node');
-    //   $build['content'] = $view_builder->view($node, $config['view_mode']);
-    // }
-    // If ($node_id) {
-    //   $node = $this->entityTypeManager->getStorage('node')->load($node_id);
-    // if ($node) {
-    //     $build = [
-    //       '#markup' => $node->label(),
-    //     ];
-    //   }
-    // }
-    // Return $build;
     $config = $this->getConfiguration();
     $node_id = $this->configuration['node_id'];
     $build = [];

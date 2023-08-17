@@ -11,14 +11,27 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Configure Access Task Module settings for this site.
  */
 class SettingsForm extends ConfigFormBase {
-
+  /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
 
   protected $entityTypeManager;
 
+  /**
+   * Constructor for the Controller.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager service.
+   */
   public function __construct(EntityTypeManagerInterface $entityTypeManager) {
     $this->entityTypeManager = $entityTypeManager;
   }
 
+  /**
+   * Dependency injection.
+   */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('entity_type.manager')
