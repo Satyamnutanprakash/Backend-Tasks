@@ -33,6 +33,15 @@ public static function create(ContainerInterface $container) {
 
     $rows = [];
 
+    $header = [
+      'id' => t('ID'),
+      'firstname' => t('First Name'),
+      'lastname' => t('Last Name'),
+      'email' => t('Email'),
+      'phone' => t('Phone'),
+      'gender' => t('Gender'),
+    ];
+
     foreach ($query as $row) {
       $rows[] = [
           'id' => $row->id,
@@ -45,7 +54,8 @@ public static function create(ContainerInterface $container) {
     }
 
     $build = [
-      '#theme' => 'custom_template',
+      '#type' => 'table',
+      '#header' => $header,
       '#rows' => $rows,
     ];
 
