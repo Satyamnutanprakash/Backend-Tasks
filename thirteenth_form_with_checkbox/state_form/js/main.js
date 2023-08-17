@@ -2,7 +2,7 @@
 
 document.addEventListener("DOMContentLoaded", function () {
   let checkbox = document.getElementById("checkbox");
-  let lastname = document.getElementById("lastname");
+  let lastname = document.querySelector(".form-item-lastname");
 
   if (checkbox.checked) {
     lastname.style.display = 'none';

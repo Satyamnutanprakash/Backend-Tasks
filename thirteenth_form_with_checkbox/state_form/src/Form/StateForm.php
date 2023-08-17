@@ -4,35 +4,50 @@ namespace Drupal\state_form\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Messenger\MessengerInterface;
-use Drupal\Core\Database\Connection;
-use Drupal\Core\Logger\LoggerChannel;
-use Drupal\Core\Logger\LoggerChannelFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
-
+/**
+ * Returns state values form.
+ */
 class StateForm extends FormBase {
 
-
+  /**
+   * The config factory service.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
+   */
   protected $logger;
 
+  /**
+   * Sets the form id.
+   */
   public function getFormId() {
     return 'state_form';
   }
 
-  public function __construct(LoggerChannelFactoryInterface $logger_factory)
-  {
+  /**
+   * Constructor for the service.
+   *
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   The logger service.
+   */
+  public function __construct(LoggerChannelFactoryInterface $logger_factory) {
     $this->logger = $logger_factory->get('state_form');
   }
 
-  public static function create(ContainerInterface $container)
-  {
+  /**
+   * Dependency injection.
+   */
+  public static function create(ContainerInterface $container) {
     return new static(
       $container->get('logger.factory')
     );
   }
 
+  /**
+   * Build form function.
+   */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
     $form['#attached']['library'][] = 'state_form/js_lib';
@@ -64,28 +79,19 @@ class StateForm extends FormBase {
     return $form;
   }
 
-  public function submitForm(array &$form, FormStateInterface $form_state)
-  {
+  /**
+   * Submit form function.
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
     $firstname = $form_state->getValue('firstname');
     $lastname = $form_state->getValue('lastname');
 
-    // $this->logger->info('Form Submitted. First Name: @first_name, Last Name: @last_name', [
-    //   '@first_name' => $firstname,
-    //   '@last_name' => $lastname,
-    // ]);
-    // $this->logger->error('Form Submitted. First Name: @first_name, Last Name: @last_name', [
-    //   '@first_name' => $firstname,
-    //   '@last_name' => $lastname,
-    // ]);
-    // $this->logger->warning('Form Submitted. First Name: @first_name, Last Name: @last_name', [
-    //   '@first_name' => $firstname,
-    //   '@last_name' => $lastname,
-    // ]);
+    // Alternatives of notice: warning, error, info.
     $this->logger->notice('Form Submitted. First Name: @first_name, Last Name: @last_name', [
       '@first_name' => $firstname,
       '@last_name' => $lastname,
     ]);
-    // $this->logger('state_form')->error($message);
 
   }
+
 }
