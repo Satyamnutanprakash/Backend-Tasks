@@ -4,11 +4,25 @@ namespace Drupal\adv_form\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Configure Advanced Form Task Module settings for this site.
  */
 class SettingsForm extends ConfigFormBase {
+
+  protected $entityTypeManager;
+
+  public function __construct(EntityTypeManagerInterface $entityTypeManager) {
+    $this->entityTypeManager = $entityTypeManager;
+  }
+
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('entity_type.manager')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -45,7 +59,7 @@ class SettingsForm extends ConfigFormBase {
       '#type' => 'entity_autocomplete',
       '#title' => $this->t('Tags'),
       '#target_type' => 'taxonomy_term',
-      '#default_value' => \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($term),
+      '#default_value' => $this->entityTypeManager->getStorage('taxonomy_term')->load($term),
     ];
     return parent::buildForm($form, $form_state);
   }
