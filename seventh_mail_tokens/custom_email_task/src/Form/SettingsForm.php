@@ -5,11 +5,25 @@ namespace Drupal\custom_email_task\Form;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Extension\ModuleHandler;
 
 /**
  * Configure CUstom Email Task Module settings for this site.
  */
 class SettingsForm extends ConfigFormBase {
+
+  protected $moduleHandler;
+
+  public function __construct(ModuleHandler $moduleHandler) {
+    $this->moduleHandler = $moduleHandler;
+  }
+
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('module_handler')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -51,7 +65,7 @@ class SettingsForm extends ConfigFormBase {
       '#required' => TRUE,
     ];
 
-    if (\Drupal::moduleHandler()->moduleExists('token')) {
+    if ($this->moduleHandler->moduleExists('token')) {
       $form['tokens'] = [
         '#title' => $this->t('Tokens'),
         '#type' => 'container',
