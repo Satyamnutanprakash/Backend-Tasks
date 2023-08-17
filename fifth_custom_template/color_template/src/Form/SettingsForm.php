@@ -34,7 +34,6 @@ class SettingsForm extends ConfigFormBase {
       '#default_value' => $this->config('color_template.settings')->get('title'),
     ];
 
-
     $text_format = 'basic_html';
     if ($this->config('color_template.settings')->get('paragraph')['format']) {
       $text_format = $this->config('template_task.settings')->get('paragraph')['format'];

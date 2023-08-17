@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Module for colored template controller.
+ */
+
+/**
  * Implements hook_theme().
  */
 function color_template_theme($existing, $type, $theme, $path) {
