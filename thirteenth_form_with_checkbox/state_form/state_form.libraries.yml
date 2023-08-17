@@ -1,0 +1,6 @@
+js_lib:
+  version: 1.x
+  js:
+    js/main.js: {}
+  dependencies:
+    - core/jquery

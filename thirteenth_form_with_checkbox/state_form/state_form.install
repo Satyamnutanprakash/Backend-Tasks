@@ -1,0 +1,55 @@
+<?php
+
+/**
+ * @file
+ * Create schema for database for the State Form Task Module module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function state_form_schema() {
+  $schema['state_data'] = [
+    'description' => 'State Form Table.',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key: Unique record ID.',
+      ],
+      'firstname' => [
+        'type' => 'varchar',
+        'length' => 64,
+        'not null' => TRUE,
+        'description' => 'First name',
+      ],
+      'lastname' => [
+        'type' => 'varchar',
+        'length' => 64,
+        'not null' => TRUE,
+        'description' => 'First name',
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
+
+  return $schema;
+}
+
+/**
+ * Implements hook_requirements().
+ */
+function state_form_requirements($phase) {
+  $requirements = [];
+
+  if ($phase == 'runtime') {
+    $value = mt_rand(0, 100);
+    $requirements['state_form_status'] = [
+      'title' => t('State Form Task Module status'),
+      'value' => t('State Form Task Module value: @value', ['@value' => $value]),
+      'severity' => $value > 50 ? REQUIREMENT_INFO : REQUIREMENT_WARNING,
+    ];
+  }
+
+  return $requirements;
+}

@@ -1,0 +1,7 @@
+state_form.data_form:
+  path: 'form/state-form'
+  defaults:
+    _title: State Form
+    _form: '\Drupal\state_form\Form\StateForm'
+  requirements:
+    _permission: 'access content'
