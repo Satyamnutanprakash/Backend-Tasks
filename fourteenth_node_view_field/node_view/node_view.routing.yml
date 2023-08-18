@@ -1,0 +1,11 @@
+node_view.node_link:
+  path: '/node/{node}'
+  defaults:
+    _controller: '\Drupal\node_view\Controller\NodeLinkController::getNode'
+  requirements:
+    _permission: 'access content'
+  options:
+    _admin_route: TRUE
+    parameters:
+      node:
+        type: entity:node
