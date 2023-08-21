@@ -63,7 +63,11 @@ class NodeLink extends FieldPluginBase {
       return '';
     }
 
-    $url = Url::fromRoute('node_view.node_link', [
+    // $url = Url::fromRoute('node_view.node_link', [
+    //   'node' => $node->id(),
+    // ]);
+
+    $url = Url::fromRoute('entity.node.canonical', [
       'node' => $node->id(),
     ]);
 
