@@ -1,0 +1,12 @@
+title_task.title:
+  path: '/node/{node}/title'
+  defaults:
+    _title: 'Title'
+    _controller: '\Drupal\title_task\Controller\TitleTaskController::build'
+  requirements:
+    _permission: 'access content'
+  options:
+    _admin_route: TRUE
+    parameters:
+      node:
+        type: entity:node

@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Title Controller Task module.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_entity_operation().
+ */
+function title_task_entity_operation(EntityInterface $entity) {
+  $operations = [];
+
+  // Only add an operation for node entities.
+  if ($entity->getEntityTypeId() !== 'node') {
+    return $operations;
+  }
+
+  $node_title = Url::fromRoute('title_task.title', ['node' => $entity->id()]);
+  $operations['node_title'] = [
+    'title' => t('Title'),
+    'weight' => '50',
+    'url' => $node_title,
+  ];
+
+  return $operations;
+}
