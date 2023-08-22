@@ -1,12 +1,16 @@
 <?php
 
+/**
+ * @file
+ * Module for cache invalidation.
+ */
+
 use Drupal\Core\Cache\Cache;
 use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_entity_presave().
  */
-
 function cache_sn_node_presave(NodeInterface $node) {
   $cid = 'marklove:' . $node->id();
   Cache::invalidateTags([$cid]);

@@ -10,4 +10,3 @@ cache_sn.example:
     parameters:
       node:
         type: entity:node
-

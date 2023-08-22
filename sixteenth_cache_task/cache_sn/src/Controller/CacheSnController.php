@@ -5,7 +5,6 @@ namespace Drupal\cache_sn\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\node\Entity\Node;
 use Drupal\Core\Cache\Cache;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Returns responses for Cache Task routes.
@@ -20,7 +19,6 @@ class CacheSnController extends ControllerBase {
     $nid = $node->id();
     $cid = 'marklove:' . $nid;
 
-    // Look for the item in cache so we don't have to do the work if we don't need to.
     if ($item = \Drupal::cache()->get($cid)) {
       return $item->data;
     }
