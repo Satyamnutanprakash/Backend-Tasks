@@ -1,0 +1,13 @@
+cache_sn.example:
+  path: '/cache-sn/{node}/example'
+  defaults:
+    _title: 'Cache Triggered'
+    _controller: '\Drupal\cache_sn\Controller\CacheSnController::build'
+  requirements:
+    _permission: 'access content'
+  options:
+    _admin_route: TRUE
+    parameters:
+      node:
+        type: entity:node
+
