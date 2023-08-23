@@ -2,20 +2,30 @@ Taxonomy
 
 - The main database tables involved in handling taxonomy data:
 
+	• taxonomy_index: This table maintains the relationship between terms and content 
+		(nodes or other entities) that are tagged with those terms. It's used to efficiently query 
+		and retrieve content based on their taxonomy terms.
+
 	• taxonomy_term_data: This table stores basic information about each term, such as 
-		term ID, name, description, vocabulary, and parent term relationships. It represents 
-		the terms themselves and their hierarchical structure.
+		term ID, Vocabulary ID(vid), revision ID, uuid. It represents the terms themselves 
+		and their hierarchical structure.
+
+	• taxonomy_term_revision: This table stores information for the revision data table for 
+		taxonomy_term entities, also about each vocabulary, such as term ID(tid), revision ID,
+		timestamp(revision created), and other settings related to the vocabulary.
 
 	• taxonomy_term_hierarchy: This table stores the hierarchical relationships between
 		terms. Each row represents a parent-child relationship between terms and is used to 
 		build and traverse the term hierarchy.
 
-	• taxonomy_vocabulary: This table stores information about each vocabulary, such as 
-		vocabulary ID, name, description, and other settings related to the vocabulary.
+	• taxonomy_field_data: This table stores information for taxonomy_term entities, about each 
+		vocabulary, such as term ID(tid), revision ID, vocabulary ID, name, timestamp(changed),
+		and other settings related to the vocabulary.
 
-	• taxonomy_index: This table maintains the relationship between terms and content 
-		(nodes or other entities) that are tagged with those terms. It's used to efficiently query 
-		and retrieve content based on their taxonomy terms.
+	• taxonomy_field_revision: This table stores information for the revision data table for 
+		taxonomy_term entities, also about each vocabulary, such as term ID(tid), revision ID,
+		vocabulary ID, name, timestamp(changed), and other settings related to the vocabulary.
+
 
 
 - When you perform different operations on taxonomy terms, here's how the tables are 
