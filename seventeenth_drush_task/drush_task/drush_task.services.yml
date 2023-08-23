@@ -1,0 +1,6 @@
+services:
+  drush_task.commands: #creating custom drush command
+    class: \Drupal\drush_task\Commands\DrushHelpersCommands
+    arguments: ['@state']
+    tags:
+      - { name: drush.command }
