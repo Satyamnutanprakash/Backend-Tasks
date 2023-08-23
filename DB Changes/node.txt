@@ -1,0 +1,46 @@
+Node
+
+- The main database tables involved in handling node data and revisions:
+
+	• node: This table stores basic information about each node, such as its title, type, 
+		author, creation time, and status.
+
+	• node_field_data: This table contains the most recent version of each node's fields 
+		(data), including the actual content of the node. Each row corresponds to a node and 
+		includes all its fields.
+
+	• node_field_revision: This table stores revisions of node fields. Each time a node is 
+		updated, a new row is added to this table with the updated field values. This allows 
+		Drupal to keep track of changes and maintain revision history.
+
+	• node_revision: This table keeps track of different revisions of nodes. Each row 
+		corresponds to a revision and points to the corresponding rows in the node and 
+		node_field_revision tables.
+
+	• node_revision__<field_name>: For each field attached to a node, a separate table 
+		exists to store the field's values for each revision. For example, if you have a field called 
+		"body" attached to nodes, there would be a table named node_revision__body to 
+		store the body field values for different revisions.
+
+
+- When you perform different operations on nodes, here's how the tables are affected:
+	
+	• Creating a Node: When you create a new node, an entry is added to the node table, 
+		and a corresponding entry is added to the node_field_data table with the initial field 
+		values.
+
+	• Updating a Node: When you update an existing node, a new entry is added to the 
+		node_revision table, and the relevant fields are updated in the node_field_revision
+		and corresponding field-specific revision tables.
+
+	• Deleting a Node: When you delete a node, the corresponding rows in the node, 
+		node_field_data, node_revision, and node_field_revision tables are typically marked 
+		as deleted or removed from the database.
+
+	• Viewing Revisions: When you view a specific revision of a node, the 
+		node_field_revision and field-specific revision tables are queried to retrieve the 
+		relevant data.
+
+	• Reverting Revisions: If you revert a node to a previous revision, the necessary data 
+		from the revision-specific tables is copied back to the main node_field_data and 
+		node_revision tables.

@@ -1,0 +1,41 @@
+Taxonomy
+
+- The main database tables involved in handling taxonomy data:
+
+	• taxonomy_term_data: This table stores basic information about each term, such as 
+		term ID, name, description, vocabulary, and parent term relationships. It represents 
+		the terms themselves and their hierarchical structure.
+
+	• taxonomy_term_hierarchy: This table stores the hierarchical relationships between
+		terms. Each row represents a parent-child relationship between terms and is used to 
+		build and traverse the term hierarchy.
+
+	• taxonomy_vocabulary: This table stores information about each vocabulary, such as 
+		vocabulary ID, name, description, and other settings related to the vocabulary.
+
+	• taxonomy_index: This table maintains the relationship between terms and content 
+		(nodes or other entities) that are tagged with those terms. It's used to efficiently query 
+		and retrieve content based on their taxonomy terms.
+
+
+- When you perform different operations on taxonomy terms, here's how the tables are 
+affected:
+
+	• Creating a Term: When you create a new taxonomy term, an entry is added to the 
+		taxonomy_term_data table with the term's basic information. If the term has a parent
+		term, a corresponding entry is also added to the taxonomy_term_hierarchy table to 
+		establish the hierarchical relationship.
+
+	• Updating a Term: When you update an existing term's information, the relevant fields 
+		in the taxonomy_term_data table are updated.
+
+	• Deleting a Term: When you delete a taxonomy term, the corresponding rows in the 
+		taxonomy_term_data, taxonomy_term_hierarchy, and taxonomy_index tables are 
+		typically removed.
+
+	• Tagging Content with Terms: When you associate content (nodes or entities) with 
+		taxonomy terms, entries are added to the taxonomy_index table, linking the content 
+		to the appropriate terms.
+
+	• Querying Content by Terms: When you query for content based on taxonomy terms, 
+		the taxonomy_index table is used to efficiently retrieve the relevant content items.
